@@ -6,144 +6,105 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
 <style>
-* {
-  margin: 0;
-  padding: 0;
-  box-sizing: border-box;
-  font-family: 'Segoe UI', sans-serif;
+*{margin:0;padding:0;box-sizing:border-box;font-family:'Segoe UI',sans-serif}
+body{
+height:100vh;
+background:radial-gradient(circle at center,#050c1c,#000);
+overflow:hidden;
+display:flex;
+align-items:center;
+justify-content:center;
+color:white;
+cursor:none;
 }
 
-body {
-  height: 100vh;
-  background: radial-gradient(circle at center, #050c1c, #000);
-  overflow: hidden;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  color: white;
+/* Pulse Background */
+body::before{
+content:"";
+position:absolute;
+inset:-50%;
+background:radial-gradient(circle,rgba(0,255,255,.15),transparent 60%);
+animation:pulseBg 5s infinite alternate;
 }
 
-/* Background Pulse */
-body::before {
-  content: "";
-  position: absolute;
-  inset: -50%;
-  background: radial-gradient(circle, rgba(0,255,255,.15), transparent 60%);
-  animation: pulseBg 6s infinite alternate;
+/* Main Container */
+.container{
+text-align:center;
+z-index:10;
+animation:zoomIn 2.5s ease-out forwards;
 }
 
-/* Container */
-.container {
-  text-align: center;
-  z-index: 10;
-  animation: zoomIn 2.5s ease-out forwards;
-}
-
-/* Neon Title */
-h1 {
-  font-size: 4rem;
-  color: cyan;
-  text-shadow:
-    0 0 10px cyan,
-    0 0 30px cyan,
-    0 0 60px cyan;
-  animation: flicker 3s infinite;
+/* Title */
+h1{
+font-size:4rem;
+color:cyan;
+text-shadow:0 0 10px cyan,0 0 40px cyan,0 0 80px cyan;
+animation:flicker 3s infinite;
 }
 
 /* Subtitle */
-h2 {
-  margin-top: 12px;
-  font-size: 2.2rem;
-  color: #ff4dff;
-  text-shadow: 0 0 25px #ff4dff;
-  animation: slideUp 2s ease forwards;
+h2{
+margin-top:12px;
+font-size:2.2rem;
+color:#ff4dff;
+text-shadow:0 0 30px #ff4dff;
+animation:slideUp 2s forwards;
 }
 
 /* Age */
-.age {
-  margin-top: 20px;
-  font-size: 6.5rem;
-  font-weight: bold;
-  color: gold;
-  text-shadow:
-    0 0 25px gold,
-    0 0 60px orange;
-  animation: heartbeat 1.8s infinite;
+.age{
+margin-top:20px;
+font-size:7rem;
+font-weight:bold;
+color:gold;
+text-shadow:0 0 30px gold,0 0 80px orange;
+animation:heartbeat 1.6s infinite;
 }
 
 /* Cake */
-.cake {
-  font-size: 5rem;
-  margin-top: 15px;
-  animation: float 3s infinite ease-in-out;
+.cake{
+font-size:5rem;
+margin-top:10px;
+animation:float 3s infinite ease-in-out;
 }
 
-/* Floating particles */
-.particle {
-  position: absolute;
-  font-size: 20px;
-  animation: rise 8s linear infinite;
-  opacity: 0.7;
+/* Cursor Trail */
+.trail{
+position:absolute;
+width:10px;
+height:10px;
+border-radius:50%;
+pointer-events:none;
+animation:trailFade 1s forwards;
 }
 
 /* Fireworks */
-.firework {
-  position: absolute;
-  width: 8px;
-  height: 8px;
-  border-radius: 50%;
-  animation: explode 1.5s ease-out forwards;
+.firework{
+position:absolute;
+width:8px;
+height:8px;
+border-radius:50%;
+animation:explode 1.4s forwards;
+}
+
+/* Floating Particles */
+.particle{
+position:absolute;
+font-size:20px;
+animation:rise 8s linear infinite;
+opacity:.7;
 }
 
 /* Animations */
-@keyframes zoomIn {
-  from { transform: scale(0.7); opacity: 0; }
-  to { transform: scale(1); opacity: 1; }
-}
-
-@keyframes flicker {
-  0%, 100% { opacity: 1; }
-  45% { opacity: 0.85; }
-  48% { opacity: 0.6; }
-  50% { opacity: 1; }
-}
-
-@keyframes heartbeat {
-  0% { transform: scale(1); }
-  25% { transform: scale(1.12); }
-  50% { transform: scale(1); }
-}
-
-@keyframes float {
-  0%,100% { transform: translateY(0); }
-  50% { transform: translateY(-20px); }
-}
-
-@keyframes rise {
-  from {
-    transform: translateY(100vh) scale(0.6);
-    opacity: 0;
-  }
-  to {
-    transform: translateY(-20vh) scale(1.2);
-    opacity: 1;
-  }
-}
-
-@keyframes explode {
-  from { transform: scale(0); opacity: 1; }
-  to { transform: scale(14); opacity: 0; }
-}
-
-@keyframes slideUp {
-  from { transform: translateY(40px); opacity: 0; }
-  to { transform: translateY(0); opacity: 1; }
-}
-
-@keyframes pulseBg {
-  from { transform: scale(1); }
-  to { transform: scale(1.15); }
-}
+@keyframes zoomIn{from{transform:scale(.7);opacity:0}to{transform:scale(1);opacity:1}}
+@keyframes flicker{45%{opacity:.7}50%{opacity:1}}
+@keyframes slideUp{from{transform:translateY(40px);opacity:0}to{opacity:1}}
+@keyframes heartbeat{0%,100%{transform:scale(1)}50%{transform:scale(1.15)}}
+@keyframes float{50%{transform:translateY(-20px)}}
+@keyframes explode{to{transform:scale(16);opacity:0}}
+@keyframes rise{from{transform:translateY(110vh)}to{transform:translateY(-20vh)}}
+@keyframes pulseBg{to{transform:scale(1.15)}}
+@keyframes trailFade{to{opacity:0;transform:scale(3)}}
 </style>
 </head>
 
@@ -151,47 +112,63 @@ h2 {
 
 <div class="container">
   <h1>🎉 Happy Birthday Jessie 🎉</h1>
-  <h2>You’re officially glowing ✨</h2>
+  <h2>Glow louder. Dream bigger.</h2>
   <div class="age">19</div>
   <div class="cake">🎂</div>
 </div>
 
 <script>
-const colors = ['cyan', 'magenta', 'gold', 'lime', 'orange'];
-const symbols = ['✨','💖','⭐','💫','🌟'];
+const colors=['cyan','magenta','gold','lime','orange','#ff6b6b'];
+const symbols=['✨','💖','⭐','💫','🌟'];
 
-/* Floating particles */
-for (let i = 0; i < 30; i++) {
-  const p = document.createElement('div');
-  p.className = 'particle';
-  p.textContent = symbols[Math.floor(Math.random() * symbols.length)];
-  p.style.left = Math.random() * 100 + 'vw';
-  p.style.animationDuration = 5 + Math.random() * 6 + 's';
+/* Floating symbols */
+for(let i=0;i<40;i++){
+  const p=document.createElement('div');
+  p.className='particle';
+  p.textContent=symbols[Math.random()*symbols.length|0];
+  p.style.left=Math.random()*100+'vw';
+  p.style.animationDuration=5+Math.random()*6+'s';
   document.body.appendChild(p);
 }
 
-/* Auto fireworks */
-setInterval(() => createFirework(
-  Math.random() * window.innerWidth,
-  Math.random() * window.innerHeight
-), 400);
+/* Auto Fireworks */
+setInterval(()=>firework(Math.random()*innerWidth,Math.random()*innerHeight),350);
 
-/* Click fireworks */
-document.addEventListener('click', e => {
-  for (let i = 0; i < 6; i++) {
-    createFirework(e.clientX + Math.random()*50, e.clientY + Math.random()*50);
-  }
+/* Click Fireworks */
+document.addEventListener('click',e=>{
+  for(let i=0;i<8;i++)
+    firework(e.clientX+Math.random()*40,e.clientY+Math.random()*40);
 });
 
-function createFirework(x, y) {
-  const fw = document.createElement('div');
-  fw.className = 'firework';
-  fw.style.left = x + 'px';
-  fw.style.top = y + 'px';
-  fw.style.background = colors[Math.floor(Math.random() * colors.length)];
-  document.body.appendChild(fw);
-  setTimeout(() => fw.remove(), 1500);
+/* Firework Function */
+function firework(x,y){
+  const f=document.createElement('div');
+  f.className='firework';
+  f.style.left=x+'px';
+  f.style.top=y+'px';
+  f.style.background=colors[Math.random()*colors.length|0];
+  document.body.appendChild(f);
+  setTimeout(()=>f.remove(),1400);
 }
+
+/* Cursor Neon Trail */
+document.addEventListener('mousemove',e=>{
+  const t=document.createElement('div');
+  t.className='trail';
+  t.style.left=e.clientX+'px';
+  t.style.top=e.clientY+'px';
+  t.style.background=colors[Math.random()*colors.length|0];
+  document.body.appendChild(t);
+  setTimeout(()=>t.remove(),1000);
+});
+
+/* Parallax Effect */
+document.addEventListener('mousemove',e=>{
+  const x=(e.clientX/window.innerWidth-0.5)*30;
+  const y=(e.clientY/window.innerHeight-0.5)*30;
+  document.querySelector('.container').style.transform=
+    `translate(${x}px,${y}px)`;
+});
 </script>
 
 </body>
