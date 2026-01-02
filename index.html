@@ -1,194 +1,198 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8" />
-  <title>Happy 19th Birthday Jessie 🎉</title>
-  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<meta charset="UTF-8">
+<title>Happy 19th Birthday Jessie 🎉</title>
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
 
-  <style>
-    * {
-      margin: 0;
-      padding: 0;
-      box-sizing: border-box;
-      font-family: 'Segoe UI', sans-serif;
-    }
+<style>
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+  font-family: 'Segoe UI', sans-serif;
+}
 
-    body {
-      height: 100vh;
-      background: radial-gradient(circle at top, #0f2027, #000);
-      overflow: hidden;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      color: #fff;
-    }
+body {
+  height: 100vh;
+  background: radial-gradient(circle at center, #050c1c, #000);
+  overflow: hidden;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: white;
+}
 
-    .container {
-      text-align: center;
-      z-index: 2;
-      animation: fadeIn 2s ease-in-out;
-    }
+/* Background Pulse */
+body::before {
+  content: "";
+  position: absolute;
+  inset: -50%;
+  background: radial-gradient(circle, rgba(0,255,255,.15), transparent 60%);
+  animation: pulseBg 6s infinite alternate;
+}
 
-    h1 {
-      font-size: 3.8rem;
-      color: #00f7ff;
-      text-shadow: 
-        0 0 10px #00f7ff,
-        0 0 30px #00f7ff,
-        0 0 60px #00f7ff;
-      animation: pulse 2s infinite alternate;
-    }
+/* Container */
+.container {
+  text-align: center;
+  z-index: 10;
+  animation: zoomIn 2.5s ease-out forwards;
+}
 
-    h2 {
-      margin-top: 10px;
-      font-size: 2.2rem;
-      color: #ff4dff;
-      text-shadow:
-        0 0 10px #ff4dff,
-        0 0 30px #ff4dff;
-    }
+/* Neon Title */
+h1 {
+  font-size: 4rem;
+  color: cyan;
+  text-shadow:
+    0 0 10px cyan,
+    0 0 30px cyan,
+    0 0 60px cyan;
+  animation: flicker 3s infinite;
+}
 
-    .age {
-      margin-top: 15px;
-      font-size: 6rem;
-      font-weight: bold;
-      color: #ffd700;
-      text-shadow:
-        0 0 20px gold,
-        0 0 50px orange;
-      animation: pop 1.5s infinite alternate;
-    }
+/* Subtitle */
+h2 {
+  margin-top: 12px;
+  font-size: 2.2rem;
+  color: #ff4dff;
+  text-shadow: 0 0 25px #ff4dff;
+  animation: slideUp 2s ease forwards;
+}
 
-    .cake {
-      font-size: 4.5rem;
-      margin-top: 15px;
-      animation: glow 2s infinite alternate;
-    }
+/* Age */
+.age {
+  margin-top: 20px;
+  font-size: 6.5rem;
+  font-weight: bold;
+  color: gold;
+  text-shadow:
+    0 0 25px gold,
+    0 0 60px orange;
+  animation: heartbeat 1.8s infinite;
+}
 
-    /* Fireworks */
-    .firework {
-      position: absolute;
-      width: 8px;
-      height: 8px;
-      border-radius: 50%;
-      animation: explode 1.8s ease-out infinite;
-    }
+/* Cake */
+.cake {
+  font-size: 5rem;
+  margin-top: 15px;
+  animation: float 3s infinite ease-in-out;
+}
 
-    /* Balloons */
-    .balloon {
-      position: absolute;
-      bottom: -120px;
-      width: 50px;
-      height: 70px;
-      border-radius: 50%;
-      animation: floatUp 9s linear infinite;
-    }
+/* Floating particles */
+.particle {
+  position: absolute;
+  font-size: 20px;
+  animation: rise 8s linear infinite;
+  opacity: 0.7;
+}
 
-    .balloon::after {
-      content: '';
-      position: absolute;
-      width: 2px;
-      height: 35px;
-      background: #fff;
-      left: 50%;
-      top: 70px;
-    }
+/* Fireworks */
+.firework {
+  position: absolute;
+  width: 8px;
+  height: 8px;
+  border-radius: 50%;
+  animation: explode 1.5s ease-out forwards;
+}
 
-    /* Animations */
-    @keyframes explode {
-      0% {
-        transform: scale(0);
-        opacity: 1;
-      }
-      100% {
-        transform: scale(12);
-        opacity: 0;
-      }
-    }
+/* Animations */
+@keyframes zoomIn {
+  from { transform: scale(0.7); opacity: 0; }
+  to { transform: scale(1); opacity: 1; }
+}
 
-    @keyframes floatUp {
-      from {
-        transform: translateY(0);
-        opacity: 1;
-      }
-      to {
-        transform: translateY(-120vh);
-        opacity: 0;
-      }
-    }
+@keyframes flicker {
+  0%, 100% { opacity: 1; }
+  45% { opacity: 0.85; }
+  48% { opacity: 0.6; }
+  50% { opacity: 1; }
+}
 
-    @keyframes glow {
-      from {
-        text-shadow: 0 0 10px #fff;
-      }
-      to {
-        text-shadow: 0 0 40px cyan;
-      }
-    }
+@keyframes heartbeat {
+  0% { transform: scale(1); }
+  25% { transform: scale(1.12); }
+  50% { transform: scale(1); }
+}
 
-    @keyframes pop {
-      from {
-        transform: scale(1);
-      }
-      to {
-        transform: scale(1.1);
-      }
-    }
+@keyframes float {
+  0%,100% { transform: translateY(0); }
+  50% { transform: translateY(-20px); }
+}
 
-    @keyframes pulse {
-      from {
-        opacity: 0.8;
-      }
-      to {
-        opacity: 1;
-      }
-    }
+@keyframes rise {
+  from {
+    transform: translateY(100vh) scale(0.6);
+    opacity: 0;
+  }
+  to {
+    transform: translateY(-20vh) scale(1.2);
+    opacity: 1;
+  }
+}
 
-    @keyframes fadeIn {
-      from {
-        opacity: 0;
-      }
-      to {
-        opacity: 1;
-      }
-    }
-  </style>
+@keyframes explode {
+  from { transform: scale(0); opacity: 1; }
+  to { transform: scale(14); opacity: 0; }
+}
+
+@keyframes slideUp {
+  from { transform: translateY(40px); opacity: 0; }
+  to { transform: translateY(0); opacity: 1; }
+}
+
+@keyframes pulseBg {
+  from { transform: scale(1); }
+  to { transform: scale(1.15); }
+}
+</style>
 </head>
 
 <body>
 
-  <div class="container">
-    <h1>🎉 Happy Birthday Jessie 🎉</h1>
-    <h2>You Shine Brighter Every Year</h2>
-    <div class="age">19</div>
-    <div class="cake">🎂</div>
-  </div>
+<div class="container">
+  <h1>🎉 Happy Birthday Jessie 🎉</h1>
+  <h2>You’re officially glowing ✨</h2>
+  <div class="age">19</div>
+  <div class="cake">🎂</div>
+</div>
 
-  <script>
-    const colors = ['#00f7ff', '#ff4dff', '#ffd700', '#00ff85', '#ff6b6b'];
+<script>
+const colors = ['cyan', 'magenta', 'gold', 'lime', 'orange'];
+const symbols = ['✨','💖','⭐','💫','🌟'];
 
-    // Fireworks
-    setInterval(() => {
-      const firework = document.createElement('div');
-      firework.className = 'firework';
-      firework.style.left = Math.random() * 100 + 'vw';
-      firework.style.top = Math.random() * 100 + 'vh';
-      firework.style.background = colors[Math.floor(Math.random() * colors.length)];
-      document.body.appendChild(firework);
+/* Floating particles */
+for (let i = 0; i < 30; i++) {
+  const p = document.createElement('div');
+  p.className = 'particle';
+  p.textContent = symbols[Math.floor(Math.random() * symbols.length)];
+  p.style.left = Math.random() * 100 + 'vw';
+  p.style.animationDuration = 5 + Math.random() * 6 + 's';
+  document.body.appendChild(p);
+}
 
-      setTimeout(() => firework.remove(), 1800);
-    }, 300);
+/* Auto fireworks */
+setInterval(() => createFirework(
+  Math.random() * window.innerWidth,
+  Math.random() * window.innerHeight
+), 400);
 
-    // Balloons
-    for (let i = 0; i < 12; i++) {
-      const balloon = document.createElement('div');
-      balloon.className = 'balloon';
-      balloon.style.left = Math.random() * 100 + 'vw';
-      balloon.style.background = colors[Math.floor(Math.random() * colors.length)];
-      balloon.style.animationDuration = 6 + Math.random() * 5 + 's';
-      document.body.appendChild(balloon);
-    }
-  </script>
+/* Click fireworks */
+document.addEventListener('click', e => {
+  for (let i = 0; i < 6; i++) {
+    createFirework(e.clientX + Math.random()*50, e.clientY + Math.random()*50);
+  }
+});
+
+function createFirework(x, y) {
+  const fw = document.createElement('div');
+  fw.className = 'firework';
+  fw.style.left = x + 'px';
+  fw.style.top = y + 'px';
+  fw.style.background = colors[Math.floor(Math.random() * colors.length)];
+  document.body.appendChild(fw);
+  setTimeout(() => fw.remove(), 1500);
+}
+</script>
 
 </body>
 </html>
