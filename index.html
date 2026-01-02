@@ -4,111 +4,88 @@
 <meta charset="UTF-8">
 <title>Happy 19th Birthday Jessie 🎉</title>
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-
 <style>
 *{margin:0;padding:0;box-sizing:border-box;font-family:'Segoe UI',sans-serif}
 body{
 height:100vh;
-background:radial-gradient(circle at center,#050c1c,#000);
+background:#000;
 overflow:hidden;
-display:flex;
-align-items:center;
-justify-content:center;
 color:white;
 cursor:none;
 }
 
-/* Pulse Background */
-body::before{
-content:"";
-position:absolute;
-inset:-50%;
-background:radial-gradient(circle,rgba(0,255,255,.15),transparent 60%);
-animation:pulseBg 5s infinite alternate;
+/* Canvas */
+canvas{
+position:fixed;
+top:0;left:0;
+width:100%;
+height:100%;
+z-index:1;
 }
 
-/* Main Container */
+/* Content */
 .container{
+position:relative;
+z-index:5;
+height:100vh;
+display:flex;
+flex-direction:column;
+align-items:center;
+justify-content:center;
 text-align:center;
-z-index:10;
-animation:zoomIn 2.5s ease-out forwards;
 }
 
-/* Title */
 h1{
 font-size:4rem;
 color:cyan;
-text-shadow:0 0 10px cyan,0 0 40px cyan,0 0 80px cyan;
-animation:flicker 3s infinite;
+text-shadow:0 0 20px cyan,0 0 60px cyan;
+animation:beat 1.5s infinite;
 }
 
-/* Subtitle */
 h2{
-margin-top:12px;
+margin-top:10px;
 font-size:2.2rem;
 color:#ff4dff;
 text-shadow:0 0 30px #ff4dff;
-animation:slideUp 2s forwards;
 }
 
-/* Age */
 .age{
-margin-top:20px;
 font-size:7rem;
-font-weight:bold;
+margin:15px 0;
 color:gold;
-text-shadow:0 0 30px gold,0 0 80px orange;
-animation:heartbeat 1.6s infinite;
+text-shadow:0 0 40px gold;
+animation:pulse 1.2s infinite;
 }
 
-/* Cake */
-.cake{
-font-size:5rem;
-margin-top:10px;
-animation:float 3s infinite ease-in-out;
+.cake{font-size:5rem}
+
+/* Buttons */
+.controls{
+position:fixed;
+bottom:20px;
+z-index:10;
+display:flex;
+gap:12px;
 }
 
-/* Cursor Trail */
-.trail{
-position:absolute;
-width:10px;
-height:10px;
-border-radius:50%;
-pointer-events:none;
-animation:trailFade 1s forwards;
+button{
+padding:12px 18px;
+border:none;
+border-radius:25px;
+background:linear-gradient(45deg,cyan,magenta);
+color:black;
+font-weight:bold;
+cursor:pointer;
 }
 
-/* Fireworks */
-.firework{
-position:absolute;
-width:8px;
-height:8px;
-border-radius:50%;
-animation:explode 1.4s forwards;
-}
-
-/* Floating Particles */
-.particle{
-position:absolute;
-font-size:20px;
-animation:rise 8s linear infinite;
-opacity:.7;
-}
-
-/* Animations */
-@keyframes zoomIn{from{transform:scale(.7);opacity:0}to{transform:scale(1);opacity:1}}
-@keyframes flicker{45%{opacity:.7}50%{opacity:1}}
-@keyframes slideUp{from{transform:translateY(40px);opacity:0}to{opacity:1}}
-@keyframes heartbeat{0%,100%{transform:scale(1)}50%{transform:scale(1.15)}}
-@keyframes float{50%{transform:translateY(-20px)}}
-@keyframes explode{to{transform:scale(16);opacity:0}}
-@keyframes rise{from{transform:translateY(110vh)}to{transform:translateY(-20vh)}}
-@keyframes pulseBg{to{transform:scale(1.15)}}
-@keyframes trailFade{to{opacity:0;transform:scale(3)}}
+@keyframes pulse{50%{transform:scale(1.15)}}
+@keyframes beat{50%{opacity:.75}}
 </style>
 </head>
 
 <body>
+
+<canvas id="fx"></canvas>
 
 <div class="container">
   <h1>🎉 Happy Birthday Jessie 🎉</h1>
@@ -117,58 +94,93 @@ opacity:.7;
   <div class="cake">🎂</div>
 </div>
 
+<div class="controls">
+  <button onclick="toggleMusic()">🎵 Music</button>
+  <button onclick="share()">📲 Share</button>
+</div>
+
+<audio id="music" loop>
+  <source src="https://cdn.pixabay.com/audio/2022/03/15/audio_5c4d77b9f3.mp3">
+</audio>
+
 <script>
-const colors=['cyan','magenta','gold','lime','orange','#ff6b6b'];
-const symbols=['✨','💖','⭐','💫','🌟'];
-
-/* Floating symbols */
-for(let i=0;i<40;i++){
-  const p=document.createElement('div');
-  p.className='particle';
-  p.textContent=symbols[Math.random()*symbols.length|0];
-  p.style.left=Math.random()*100+'vw';
-  p.style.animationDuration=5+Math.random()*6+'s';
-  document.body.appendChild(p);
+/* Canvas Setup */
+const canvas=document.getElementById('fx');
+const ctx=canvas.getContext('2d');
+resize();
+window.onresize=resize;
+function resize(){
+canvas.width=innerWidth;
+canvas.height=innerHeight;
 }
 
-/* Auto Fireworks */
-setInterval(()=>firework(Math.random()*innerWidth,Math.random()*innerHeight),350);
+/* Fireworks */
+class Firework{
+constructor(x,y){
+this.x=x;this.y=y;
+this.particles=[];
+for(let i=0;i<60;i++){
+this.particles.push({
+x,y,
+vx:(Math.random()-0.5)*8,
+vy:(Math.random()-0.5)*8,
+life:100
+});
+}
+}
+update(){
+this.particles.forEach(p=>{
+p.x+=p.vx;
+p.y+=p.vy;
+p.vy+=0.05;
+p.life--;
+});
+}
+draw(){
+this.particles.forEach(p=>{
+ctx.fillStyle=`rgba(${200+Math.random()*55},${Math.random()*255},255,${p.life/100})`;
+ctx.fillRect(p.x,p.y,2,2);
+});
+}
+}
 
-/* Click Fireworks */
+/* Cursor Sparks */
+let fireworks=[];
 document.addEventListener('click',e=>{
-  for(let i=0;i<8;i++)
-    firework(e.clientX+Math.random()*40,e.clientY+Math.random()*40);
+fireworks.push(new Firework(e.clientX,e.clientY));
 });
 
-/* Firework Function */
-function firework(x,y){
-  const f=document.createElement('div');
-  f.className='firework';
-  f.style.left=x+'px';
-  f.style.top=y+'px';
-  f.style.background=colors[Math.random()*colors.length|0];
-  document.body.appendChild(f);
-  setTimeout(()=>f.remove(),1400);
+/* Auto fireworks */
+setInterval(()=>{
+fireworks.push(new Firework(Math.random()*innerWidth,Math.random()*innerHeight*0.7));
+},700);
+
+/* Animation Loop */
+function animate(){
+ctx.fillStyle='rgba(0,0,0,0.2)';
+ctx.fillRect(0,0,canvas.width,canvas.height);
+
+fireworks.forEach(f=>{f.update();f.draw();});
+fireworks=fireworks.filter(f=>f.particles.some(p=>p.life>0));
+
+requestAnimationFrame(animate);
+}
+animate();
+
+/* Music */
+const music=document.getElementById('music');
+let playing=false;
+function toggleMusic(){
+playing=!playing;
+playing?music.play():music.pause();
 }
 
-/* Cursor Neon Trail */
-document.addEventListener('mousemove',e=>{
-  const t=document.createElement('div');
-  t.className='trail';
-  t.style.left=e.clientX+'px';
-  t.style.top=e.clientY+'px';
-  t.style.background=colors[Math.random()*colors.length|0];
-  document.body.appendChild(t);
-  setTimeout(()=>t.remove(),1000);
-});
-
-/* Parallax Effect */
-document.addEventListener('mousemove',e=>{
-  const x=(e.clientX/window.innerWidth-0.5)*30;
-  const y=(e.clientY/window.innerHeight-0.5)*30;
-  document.querySelector('.container').style.transform=
-    `translate(${x}px,${y}px)`;
-});
+/* Share */
+function share(){
+navigator.share?
+navigator.share({title:'Jessie Turns 19 🎉',url:location.href}):
+navigator.clipboard.writeText(location.href)&&alert('Link copied!');
+}
 </script>
 
 </body>
