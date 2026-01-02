@@ -2,28 +2,12 @@
 <html lang="en">
 <head>
 <meta charset="UTF-8">
-<title>Happy 19th Birthday Jessie 🎉</title>
+<title>Jessie Turns 19 🎉</title>
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <style>
 *{margin:0;padding:0;box-sizing:border-box;font-family:'Segoe UI',sans-serif}
-body{
-height:100vh;
-background:#000;
-overflow:hidden;
-color:white;
-cursor:none;
-}
-
-/* Canvas */
-canvas{
-position:fixed;
-top:0;left:0;
-width:100%;
-height:100%;
-z-index:1;
-}
-
-/* Content */
+body{background:#000;overflow:hidden;color:#fff;cursor:none}
+canvas{position:fixed;top:0;left:0;width:100%;height:100%;z-index:1}
 .container{
 position:relative;
 z-index:5;
@@ -34,21 +18,18 @@ align-items:center;
 justify-content:center;
 text-align:center;
 }
-
 h1{
 font-size:4rem;
 color:cyan;
 text-shadow:0 0 20px cyan,0 0 60px cyan;
-animation:beat 1.5s infinite;
+animation:beat 1.4s infinite;
 }
-
 h2{
-margin-top:10px;
 font-size:2.2rem;
+margin-top:10px;
 color:#ff4dff;
-text-shadow:0 0 30px #ff4dff;
+text-shadow:0 0 25px #ff4dff;
 }
-
 .age{
 font-size:7rem;
 margin:15px 0;
@@ -56,10 +37,7 @@ color:gold;
 text-shadow:0 0 40px gold;
 animation:pulse 1.2s infinite;
 }
-
 .cake{font-size:5rem}
-
-/* Buttons */
 .controls{
 position:fixed;
 bottom:20px;
@@ -67,19 +45,16 @@ z-index:10;
 display:flex;
 gap:12px;
 }
-
 button{
 padding:12px 18px;
 border:none;
-border-radius:25px;
-background:linear-gradient(45deg,cyan,magenta);
-color:black;
+border-radius:30px;
 font-weight:bold;
 cursor:pointer;
+background:linear-gradient(45deg,cyan,magenta);
 }
-
 @keyframes pulse{50%{transform:scale(1.15)}}
-@keyframes beat{50%{opacity:.75}}
+@keyframes beat{50%{opacity:.7}}
 </style>
 </head>
 
@@ -87,7 +62,7 @@ cursor:pointer;
 
 <canvas id="fx"></canvas>
 
-<div class="container">
+<div class="container" id="parallax">
   <h1>🎉 Happy Birthday Jessie 🎉</h1>
   <h2>Glow louder. Dream bigger.</h2>
   <div class="age">19</div>
@@ -107,62 +82,66 @@ cursor:pointer;
 /* Canvas Setup */
 const canvas=document.getElementById('fx');
 const ctx=canvas.getContext('2d');
-resize();
-window.onresize=resize;
-function resize(){
-canvas.width=innerWidth;
-canvas.height=innerHeight;
-}
+resize();window.onresize=resize;
+function resize(){canvas.width=innerWidth;canvas.height=innerHeight}
 
-/* Fireworks */
+/* Firework Physics */
 class Firework{
 constructor(x,y){
-this.x=x;this.y=y;
-this.particles=[];
-for(let i=0;i<60;i++){
-this.particles.push({
+this.p=[];
+for(let i=0;i<80;i++){
+this.p.push({
 x,y,
-vx:(Math.random()-0.5)*8,
-vy:(Math.random()-0.5)*8,
+vx:(Math.random()-0.5)*10,
+vy:(Math.random()-0.5)*10,
 life:100
 });
 }
 }
 update(){
-this.particles.forEach(p=>{
-p.x+=p.vx;
-p.y+=p.vy;
-p.vy+=0.05;
-p.life--;
+this.p.forEach(pt=>{
+pt.x+=pt.vx;
+pt.y+=pt.vy;
+pt.vy+=0.05;
+pt.life--;
 });
 }
 draw(){
-this.particles.forEach(p=>{
-ctx.fillStyle=`rgba(${200+Math.random()*55},${Math.random()*255},255,${p.life/100})`;
-ctx.fillRect(p.x,p.y,2,2);
+this.p.forEach(pt=>{
+ctx.fillStyle=`rgba(${200+Math.random()*55},${Math.random()*255},255,${pt.life/100})`;
+ctx.fillRect(pt.x,pt.y,2,2);
 });
 }
 }
 
-/* Cursor Sparks */
 let fireworks=[];
-document.addEventListener('click',e=>{
-fireworks.push(new Firework(e.clientX,e.clientY));
-});
 
 /* Auto fireworks */
-setInterval(()=>{
-fireworks.push(new Firework(Math.random()*innerWidth,Math.random()*innerHeight*0.7));
-},700);
+setInterval(()=>fireworks.push(new Firework(Math.random()*innerWidth,Math.random()*innerHeight*0.6)),700);
+
+/* Click fireworks + mini game */
+document.addEventListener('click',e=>{
+fireworks.push(new Firework(e.clientX,e.clientY));
+score++;
+});
+
+/* Cursor Trail */
+document.addEventListener('mousemove',e=>{
+ctx.fillStyle='rgba(0,255,255,0.6)';
+ctx.fillRect(e.clientX,e.clientY,4,4);
+
+/* Parallax */
+const x=(e.clientX/innerWidth-0.5)*30;
+const y=(e.clientY/innerHeight-0.5)*30;
+document.getElementById('parallax').style.transform=`translate(${x}px,${y}px)`;
+});
 
 /* Animation Loop */
 function animate(){
-ctx.fillStyle='rgba(0,0,0,0.2)';
+ctx.fillStyle='rgba(0,0,0,0.25)';
 ctx.fillRect(0,0,canvas.width,canvas.height);
-
 fireworks.forEach(f=>{f.update();f.draw();});
-fireworks=fireworks.filter(f=>f.particles.some(p=>p.life>0));
-
+fireworks=fireworks.filter(f=>f.p.some(p=>p.life>0));
 requestAnimationFrame(animate);
 }
 animate();
@@ -170,10 +149,7 @@ animate();
 /* Music */
 const music=document.getElementById('music');
 let playing=false;
-function toggleMusic(){
-playing=!playing;
-playing?music.play():music.pause();
-}
+function toggleMusic(){playing=!playing;playing?music.play():music.pause()}
 
 /* Share */
 function share(){
@@ -181,6 +157,14 @@ navigator.share?
 navigator.share({title:'Jessie Turns 19 🎉',url:location.href}):
 navigator.clipboard.writeText(location.href)&&alert('Link copied!');
 }
+
+/* Score Easter Egg */
+let score=0;
+setInterval(()=>{
+if(score>20){
+document.querySelector('h2').textContent='You popped the universe 🎆';
+}
+},1000);
 </script>
 
 </body>
